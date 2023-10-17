@@ -4,7 +4,10 @@ const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
     username: String,
-    idName: String,
+    idName: {
+        type: String,
+        unique: true
+    },
     birthdate: Date,
     firstConnection: Date,
     profileImage: String,
@@ -32,7 +35,9 @@ const UserSchema = new Schema({
     signets:[{
         type: mongoose.Schema.ObjectId,
         ref: 'Post' 
-    }]
+    }],
+
+    conversation: [String],
 });
 
 const User = mongoose.model('User',UserSchema);
