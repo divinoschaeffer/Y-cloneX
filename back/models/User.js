@@ -9,6 +9,7 @@ const UserSchema = new Schema({
     firstConnection: Date,
     profileImage: String,
     landingImage: String,
+    public: Boolean,
 
     followers:[String],
     follows:[String],
@@ -25,7 +26,12 @@ const UserSchema = new Schema({
 
     comments:[{
         type: mongoose.Schema.ObjectId,
-        ref: 'Comment'
+        ref: 'Post'
+    }],
+
+    signets:[{
+        type: mongoose.Schema.ObjectId,
+        ref: 'Post' 
     }]
 });
 
