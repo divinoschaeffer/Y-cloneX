@@ -3,21 +3,37 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const PostSchema = new Schema({
-    idName: String,
+    idName: {
+        type: String,
+        required: true,
+    },
+
     text: String,
-    retweets: Number,
-    signet: Number,
-    likes: Number,
-    comments: [{
-        type: mongoose.Schema.ObjectId,
-        ref: 'Post'
-    }],
-    imagesOrVideos: [{
-        type: mongoose.Schema.ObjectId,
-        ref: 'Image'
-    }],
+    retweets: {
+        type: Number,
+        default: 0
+    },
+
+    signet: {
+        type: Number,
+        default: 0
+    },
+
+    likes: {
+        type: number, 
+        default: 0
+    },
+
+    comments: {
+        type: [{ type: mongoose.Schema.ObjectId, ref: 'Post' }], // Définit le type comme un tableau d'ObjectId
+        default: [], 
+    },
+    imagesOrVideos: {
+        type: [{ type: mongoose.Schema.ObjectId, ref: 'Post' }], // Définit le type comme un tableau d'ObjectId
+        default: [], 
+    },
     responseTo:{
-        type: mongoose.Schema.ObjectId,
-        ref: 'Post'
+        type: [{ type: mongoose.Schema.ObjectId, ref: 'Post' }], // Définit le type comme un tableau d'ObjectId
+        default: [], 
     }
 })

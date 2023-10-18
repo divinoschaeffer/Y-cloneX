@@ -3,39 +3,69 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
-    username: String,
+    username: {
+        type: String,
+        required: true
+    },
+
     idName: {
         type: String,
-        unique: true
+        unique: true,
+        required: true
     },
-    birthdate: Date,
-    firstConnection: Date,
+
+    password: {
+        type: String,
+        required: true
+    },
+
+    birthdate: {
+        type: Date,
+        required: true,
+    },
+
+    firstConnection: {
+        type: Date,
+        required: true
+    },
+
     profileImage: String,
     landingImage: String,
-    public: Boolean,
 
-    followers:[String],
-    follows:[String],
+    public: {
+        type: Boolean,
+        required: true
+    },
 
-    posts:[{
-        type: mongoose.Schema.ObjectId,
-        ref: 'Post'
-    }],
+    followers:{
+        type: [String],
+        default: []
+    },
 
-    likes:[{
-        type: mongoose.Schema.ObjectId,
-        ref: 'Post'
-    }],
+    follows:{
+        type: [String],
+        default: []
+    },
 
-    comments:[{
-        type: mongoose.Schema.ObjectId,
-        ref: 'Post'
-    }],
+    posts: {
+        type: [{ type: mongoose.Schema.ObjectId, ref: 'Post' }], // Définit le type comme un tableau d'ObjectId
+        default: [], 
+    },
+        
+    likes: {
+        type: [{ type: mongoose.Schema.ObjectId, ref: 'Post' }], // Définit le type comme un tableau d'ObjectId
+        default: [], 
+    },
 
-    signets:[{
-        type: mongoose.Schema.ObjectId,
-        ref: 'Post' 
-    }],
+    comments:{
+        type: [{ type: mongoose.Schema.ObjectId, ref: 'Post' }], // Définit le type comme un tableau d'ObjectId
+        default: [], 
+    },
+
+    signets:{
+        type: [{ type: mongoose.Schema.ObjectId, ref: 'Post' }], // Définit le type comme un tableau d'ObjectId
+        default: [], 
+    },
 
     conversation: [String],
 });
