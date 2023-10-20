@@ -19,14 +19,12 @@ const UserSchema = new Schema({
         required: true
     },
 
-    birthdate: {
+    birthDate: {
         type: Date,
-        required: true,
     },
 
     firstConnection: {
         type: Date,
-        required: true
     },
 
     profileImage: String,
