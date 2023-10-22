@@ -6,8 +6,7 @@ const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
 const authRoute = require('./routes/auth.js')
 
-dotenv.config();
-
+dotenv.config(); 
 
 const port = process.env.PORT || 3000; // Port sur lequel le serveur écoutera
 
@@ -21,10 +20,18 @@ mongoose.connect(process.env.DATABASE_URL)
     console.error('Erreur de connexion à la base de données MongoDB :', err);
   });
 
+  mongoose.connection.on('error', (err) => {
+    console.error('Erreur de connexion à MongoDB :', err);
+  });
+  
+  mongoose.connection.on('disconnected', () => {
+    console.log('Déconnexion de MongoDB');
+  });
+
 // Middleware pour gérer les données au format JSON
 app.use(express.json());
-app.use('/api/auth',authRoute);
 app.use(cookieParser());
+app.use('/api/auth',authRoute);
 
 app.listen(port, () => {
     console.log('Connexion sur le port');

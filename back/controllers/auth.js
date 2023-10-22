@@ -1,6 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const User = require('../models/User')
+const jwt = require('jsonwebtoken')
 
 async function signIn(req, res) {
     try {
@@ -17,21 +18,21 @@ async function signIn(req, res) {
             public: req.body.public
         })
 
-        // try {
+        try {
             
-        //     const secretKey = process.env.TOKEN_KEY;
-        //     const data = {
-        //         user: {
-        //             username: req.body.username,
-        //             idName: req.body.idName,
-        //             public: req.body.public
-        //         }
-        //     };
-        //     const token = jwt.sign(data, secretKey);
-        //     res.cookie('token', token, {httpOnly: true});
-        // } catch (error) {
-        //     res.status(500).json("Erreur lors de la création du token")
-        // }
+            const secretKey = process.env.TOKEN_KEY;
+            const data = {
+                user: {
+                    username: req.body.username,
+                    idName: req.body.idName,
+                    public: req.body.public
+                }
+            };
+            const token = jwt.sign(data, secretKey);
+            res.cookie('token', token, {httpOnly: true});
+        } catch (error) {
+            res.status(500).json(console.log(error))
+        }
         
         user.save()
             .then((savedUser) => {
