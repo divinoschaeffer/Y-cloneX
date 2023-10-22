@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 
-function createToken(req, res, next){
+function verifToken(req, res, next){
     const token = req.header('Authorization');
 
     if (!token) {
@@ -18,7 +18,7 @@ function createToken(req, res, next){
         if (payload.user.idName !== user.idName) {
           return res.status(403).json({ message: 'Accès interdit. Le token ne correspond pas à l\'utilisateur actuel.' });
         }
-    
+        
         next();
       } catch (erreur) {
         return res.status(401).json({ message: 'Accès non autorisé. Jeton d\'accès invalide.' });
