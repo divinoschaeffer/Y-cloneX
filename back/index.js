@@ -4,7 +4,8 @@ const dotenv =require('dotenv');
 const app = express();
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
-const authRoute = require('./routes/auth.js')
+const authRoute = require('./routes/auth.js');
+const userRoute = require('./routes/user.js');
 
 dotenv.config(); 
 
@@ -31,7 +32,8 @@ mongoose.connect(process.env.DATABASE_URL)
 // Middleware pour gérer les données au format JSON
 app.use(express.json());
 app.use(cookieParser());
-app.use('/api/auth',authRoute);
+app.use('/api/auth', authRoute);
+app.use('/api/user', userRoute);
 
 app.listen(port, () => {
     console.log('Connexion sur le port');
