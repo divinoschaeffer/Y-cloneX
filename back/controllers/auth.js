@@ -47,4 +47,39 @@ async function signIn(req, res) {
     }
 }
 
-module.exports = signIn;
+async function login(req, res){
+    const {idName, password} = req.body;
+    let loggedUser;
+    await User.findOne({idName})
+        .then((user) => loggedUser = user)
+        .catch((err) =>  {
+            res.status(404).json({message: "Utilisateur non trouvé"});
+            console.log(err);
+        })
+
+    await bcrypt.compare(password, loggedUser.password)
+        .then(() => {
+            try {
+            
+                const secretKey = process.env.TOKEN_KEY;
+                const data = {
+                    user: {
+                        username: loggedUser.username,
+                        idName: loggedUser.idName,
+                        public: loggedUser.public
+                    }
+                };
+                const token = jwt.sign(data, secretKey);
+                res.cookie('token', token, {httpOnly: true});
+            } catch (error) {
+                res.status(500).json(console.log(error))
+            }
+            res.status(201).json("Authentification réussie")
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(404).json("L'authentification a échoué");
+        })
+}
+
+module.exports = {signIn, login};
