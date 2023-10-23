@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 
+// Vérification du token
 function verifTokenUser(req, res, next){
     const token = req.cookies.token;
 

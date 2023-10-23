@@ -4,6 +4,7 @@ const User = require('../models/User')
 const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser')
 
+// Enregistrement d'un nouvel utilisateur
 async function signIn(req, res) {
     try {
 
@@ -49,6 +50,7 @@ async function signIn(req, res) {
     }
 }
 
+// Connexion d'un utilisateur
 async function login(req, res){
     const {idName, password} = req.body;
     let loggedUser;

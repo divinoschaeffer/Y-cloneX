@@ -1,6 +1,7 @@
 const express = require('express');
 const User = require('../models/User');
 
+// Mettre à jour un utilisateur
 async function update(req, res){
 
     const idName = req.params.idName;
@@ -20,6 +21,7 @@ async function update(req, res){
     }
 }
 
+// Récupérer un utilisateur
 async function getUser(req, res){
 
     const idName = req.params.idName;
@@ -39,6 +41,7 @@ async function getUser(req, res){
         })
 }
 
+// Récupérer tous les utilisateurs
 async function getAll(req, res){
 
     const currentUser = req.user.user;

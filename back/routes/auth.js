@@ -4,7 +4,7 @@ const {signIn, login} = require('../controllers/auth')
 
 const router = express.Router();
 
-router.post('/sign-in', signIn);
-router.post('/login', login)
+router.post('/sign-in', signIn); // enregistrer un nouvel utilisateur
+router.post('/login', login) // connexion d'un utilisateur
 
 module.exports =  router;
