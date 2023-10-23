@@ -41,5 +41,5 @@ app.listen(port, () => {
 
 // Route racine
 app.get('/', (req, res) => {
-  res.send('Bienvenue sur le serveur Express !');
+  res.json('Bienvenue sur le serveur Express !');
 });

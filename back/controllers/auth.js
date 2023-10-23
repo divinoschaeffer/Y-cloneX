@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const User = require('../models/User')
 const jwt = require('jsonwebtoken')
+const cookieParser = require('cookie-parser')
 
 async function signIn(req, res) {
     try {
@@ -25,7 +26,8 @@ async function signIn(req, res) {
                 user: {
                     username: req.body.username,
                     idName: req.body.idName,
-                    public: req.body.public
+                    public: req.body.public,
+                    role: req.body.role
                 }
             };
             const token = jwt.sign(data, secretKey);
@@ -66,7 +68,8 @@ async function login(req, res){
                     user: {
                         username: loggedUser.username,
                         idName: loggedUser.idName,
-                        public: loggedUser.public
+                        public: loggedUser.public,
+                        role: loggedUser.role
                     }
                 };
                 const token = jwt.sign(data, secretKey);

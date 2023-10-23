@@ -64,6 +64,11 @@ const UserSchema = new Schema({
         type: [{ type: mongoose.Schema.ObjectId, ref: 'Post' }], // Définit le type comme un tableau d'ObjectId
         default: [], 
     },
+    role: {
+        type: Number,
+        required: true,
+        default: 0
+    },
 
     conversation: [String],
 });
