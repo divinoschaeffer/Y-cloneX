@@ -8,7 +8,17 @@ const PostSchema = new Schema({
         required: true,
     },
 
+    username:{
+        type: String,
+        required: true
+    },
+
+    profileImage: String,
+
     text: String,
+
+    creationDate: Date,
+
     retweets: {
         type: Number,
         default: 0
@@ -20,7 +30,7 @@ const PostSchema = new Schema({
     },
 
     likes: {
-        type: number, 
+        type: Number, 
         default: 0
     },
 
@@ -29,11 +39,15 @@ const PostSchema = new Schema({
         default: [], 
     },
     imagesOrVideos: {
-        type: [{ type: mongoose.Schema.ObjectId, ref: 'Post' }], // Définit le type comme un tableau d'ObjectId
+        type: [{ type: mongoose.Schema.ObjectId, ref: 'Image' }], // Définit le type comme un tableau d'ObjectId
         default: [], 
     },
     responseTo:{
         type: [{ type: mongoose.Schema.ObjectId, ref: 'Post' }], // Définit le type comme un tableau d'ObjectId
-        default: [], 
     }
 })
+
+
+const Post = mongoose.model('Post', PostSchema);
+
+module.exports = Post;
