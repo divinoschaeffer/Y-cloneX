@@ -19,6 +19,10 @@ const UserSchema = new Schema({
         required: true
     },
 
+    bio: {
+        type: String
+    },
+
     birthDate: {
         type: Date,
     },
