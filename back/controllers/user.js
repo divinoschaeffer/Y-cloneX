@@ -1,5 +1,6 @@
 const express = require('express');
 const User = require('../models/User');
+const Post = require('../models/Post');
 
 // Mettre à jour un utilisateur
 async function update(req, res){
@@ -12,7 +13,7 @@ async function update(req, res){
         res.status(500).json("Vous n'avez pas l'autorisation");
     }
     else{
-        User.findOneAndUpdate({idName},update, {new: true})
+        User.findOneAndUpdate({idName}, update, {new: true})
         .then((user) => res.status(201).json(user))
         .catch((err) => {
             res.status(500).json("Errer lors de la mise à jour");
@@ -64,4 +65,33 @@ async function getAll(req, res){
         })
 }
 
-module.exports = {update, getAll, getUser};
+async function getAllPosts(req, res) {
+
+    const user = req.params.user;
+    const userPosts = [];
+
+    User.findOne({ idName: user })
+    .then((user) => {
+        
+        const postPromises = user.posts.map((idPost) => {
+        return Post.findById(idPost)
+            .then((post) => {
+            userPosts.push(post);
+            console.log(post);
+            console.log(userPosts);
+            });
+        });
+
+        return Promise.all(postPromises);
+    })
+    .then(() => {
+
+        res.status(200).json(userPosts);
+    })
+    .catch((e) => {
+        console.log(e);
+        res.status(500).json("Echec de la récupération des posts");
+    })
+}
+
+module.exports = {update, getAll, getUser, getAllPosts};
