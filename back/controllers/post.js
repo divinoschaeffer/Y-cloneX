@@ -4,17 +4,25 @@ const User = require('../models/User');
 
 async function createPost(req, res){
     const currentUser = req.user.user;
-    const post = new Post(req.body);
-    post.save()
-        .then((savedPost) => {
-            // const user = User.find(currentUser.idName);
-            // const update = {savedPost._id, ...user.posts}
-            // User.findOneAndUpdate(currentUser.idName, update, {new: true})
-            //     .then(() => res.status(201).json(savedPost));
-            // TODO: Mettre à jour tout ça
-            res.status(201).json(savedPost);
+    const idName = currentUser.idName;
+    const post = new Post({
+        idName: req.body.idName,
+        username: req.body.username,
+        text: req.body.text,
+        creationDate: new Date()
+    });
+
+        post.save()
+        .then((post) => {
+                const update = {$push: {posts: post._id}};
+                User.findOneAndUpdate({idName}, update, {new: true})
+                .then((user) => res.status(200).json(user));
         })
-        .catch((err) => console.log(err))
+        .catch((err) => {
+                console.log(error);
+                res.status(500).json("Echec lors de la mis à jour de l'utilisateur");
+        })
+
 }
 
 module.exports = createPost;
