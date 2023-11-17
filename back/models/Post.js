@@ -44,6 +44,7 @@ const PostSchema = new Schema({
     },
     responseTo:{
         type: [{ type: mongoose.Schema.ObjectId, ref: 'Post' }], // Définit le type comme un tableau d'ObjectId
+        default: "",
     }
 })
 
