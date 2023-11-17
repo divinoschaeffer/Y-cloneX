@@ -53,7 +53,6 @@ async function deletePost(req, res){
                                         res.status(200).json(userUpdated);
                                 })
                         })
-                        
                 }
                 else
                         res.status(200).json(user);
@@ -64,4 +63,36 @@ async function deletePost(req, res){
         })
 }
 
-module.exports = {createPost, deletePost};
+async function likePost(req, res){
+    const currentUser = req.user.user;
+    const idName = currentUser.idName;
+    const idPost = req.params.id;
+    const mongooseIdPost = new mongoose.Types.ObjectId(idPost);
+
+    User.findOne({idName})
+    .then((user) => {
+        if(user.likes.includes(mongooseIdPost)){
+            User.findByIdAndUpdate(user._id,{$pull: {likes: mongooseIdPost}})
+            .then(() => {
+                return Post.findByIdAndUpdate(idPost,{$inc :{likes: -1}}, {new: true});
+            })
+            .then((postUpdated) => {
+                res.status(200).json(postUpdated);
+            })
+        }
+        else
+            User.findByIdAndUpdate(user._id,{$push: {likes: mongooseIdPost}})
+            .then(() => {
+                return Post.findByIdAndUpdate(idPost,{$inc :{likes: +1}}, {new: true});
+            })
+            .then((postUpdated) => {
+                res.status(200).json(postUpdated);
+            })
+    })
+    .catch((err) => {
+        console.log(err);
+        res.status(500).json("Erreur au niveau du like du post");
+    })
+}
+
+module.exports = {createPost, deletePost, likePost};
