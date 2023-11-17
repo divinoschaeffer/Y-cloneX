@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const Post = require('../models/Post');
 const User = require('../models/User');
 
@@ -25,4 +26,30 @@ async function createPost(req, res){
 
 }
 
-module.exports = createPost;
+async function deletePost(req, res){
+        const currentUser = req.user.user;
+        const id = new mongoose.Types.ObjectId(req.params.id);
+        const idName = currentUser.idName;
+
+        User.findOne({idName})
+        .then((user) => {
+                if(user.posts.includes(id)){
+                        Post.findByIdAndDelete(id)
+                        .then(() => {
+                                User.findByIdAndUpdate(user._id,{$pull: {posts: id}},{new: true})
+                                .then((userUpdated) => {
+                                        res.status(200).json(userUpdated);
+                                })
+                        })
+                        
+                }
+                else
+                        res.status(200).json(user);
+        })
+        .catch((err) => {
+                console.log(err);
+                res.status(500).json("Echec de la suppression du post")
+        })
+}
+
+module.exports = {createPost, deletePost};

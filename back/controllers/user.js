@@ -76,16 +76,13 @@ async function getAllPosts(req, res) {
         const postPromises = user.posts.map((idPost) => {
         return Post.findById(idPost)
             .then((post) => {
-            userPosts.push(post);
-            console.log(post);
-            console.log(userPosts);
+                userPosts.push(post);
             });
         });
 
         return Promise.all(postPromises);
     })
     .then(() => {
-
         res.status(200).json(userPosts);
     })
     .catch((e) => {
