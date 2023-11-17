@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 const authRoute = require('./routes/auth.js');
 const userRoute = require('./routes/user.js');
 const postRoute = require('./routes/post.js');
+const followRoute = require('./routes/follow.js');
 
 dotenv.config(); 
 
@@ -36,6 +37,7 @@ app.use(cookieParser());
 app.use('/api/auth', authRoute);
 app.use('/api/user', userRoute);
 app.use('/api/post', postRoute);
+app.use('/api/follow',followRoute);
 
 app.listen(port, () => {
     console.log('Connexion sur le port');

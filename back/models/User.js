@@ -39,6 +39,11 @@ const UserSchema = new Schema({
         required: true
     },
 
+    followRequest:{
+        type: [String],
+        default: []
+    },
+
     followers:{
         type: [String],
         default: []
@@ -74,7 +79,7 @@ const UserSchema = new Schema({
         default: 0
     },
 
-    conversation: [String],
+    conversation: [String], //TODO: changer ça
 });
 
 const User = mongoose.model('User',UserSchema);
