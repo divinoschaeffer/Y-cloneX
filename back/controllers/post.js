@@ -95,4 +95,36 @@ async function likePost(req, res){
     })
 }
 
-module.exports = {createPost, deletePost, likePost};
+async function signetPost(req, res){
+    const currentUser = req.user.user;
+    const idName = currentUser.idName;
+    const idPost = req.params.id;
+    const mongooseIdPost = new mongoose.Types.ObjectId(idPost);
+
+    User.findOne({idName})
+    .then((user) => {
+        if(user.signets.includes(mongooseIdPost)){
+            User.findByIdAndUpdate(user._id,{$pull: {signets: mongooseIdPost}})
+            .then(() => {
+                return Post.findByIdAndUpdate(idPost,{$inc :{signets: -1}}, {new: true});
+            })
+            .then((postUpdated) => {
+                res.status(200).json(postUpdated);
+            })
+        }
+        else
+            User.findByIdAndUpdate(user._id,{$push: {signets: mongooseIdPost}})
+            .then(() => {
+                return Post.findByIdAndUpdate(idPost,{$inc :{signets: +1}}, {new: true});
+            })
+            .then((postUpdated) => {
+                res.status(200).json(postUpdated);
+            })
+    })
+    .catch((err) => {
+        console.log(err);
+        res.status(500).json("Erreur au niveau du signet du post");
+    })
+}
+
+module.exports = {createPost, deletePost, likePost, signetPost};
