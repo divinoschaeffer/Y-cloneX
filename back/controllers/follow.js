@@ -36,4 +36,26 @@ async function followRequest(req, res){
     })
 }
 
-module.exports = {followRequest};
+async function acceptFollow(req, res){
+    const currentUser = req.user.user;
+    const idNameReq = req.params.idName;
+
+    User.findOne({idName: currentUser.idName})
+    .then((user) => {
+        if(!user.followRequest.includes(idNameReq)){
+            res.status(200).json("Aucune demande d'ami de la part de cet utilisateur");
+        }
+        else{
+            return User.findOneAndUpdate({idName: currentUser.idName}, {$push: {followers: idNameReq}, $pull: {followRequest: idNameReq}}, {new: true});
+        }
+    })
+    .then((updatedUser) => {
+        res.status(200).json(updatedUser);
+    })
+    .catch((err) => {
+        console.log(err);
+        res.status(500).json("Echec de l'acceptation de follow");
+    })
+}
+
+module.exports = {followRequest, acceptFollow}

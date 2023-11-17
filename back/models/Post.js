@@ -24,7 +24,7 @@ const PostSchema = new Schema({
         default: 0
     },
 
-    signet: {
+    signets: {
         type: Number,
         default: 0
     },
@@ -33,6 +33,8 @@ const PostSchema = new Schema({
         type: Number, 
         default: 0
     },
+
+    //TODO: mettre en place les citations (faire attention à si user est en public ou non)
 
     comments: {
         type: [{ type: mongoose.Schema.ObjectId, ref: 'Post' }], // Définit le type comme un tableau d'ObjectId
