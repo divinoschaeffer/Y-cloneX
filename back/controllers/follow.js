@@ -58,4 +58,18 @@ async function acceptFollow(req, res){
     })
 }
 
-module.exports = {followRequest, acceptFollow}
+async function refusFollow(req, res){
+    const currentUser = req.user.user;
+    const idNameRequest = req.params.idName;
+
+    User.findOneAndUpdate({idName: currentUser.idName}, {$pull: {followRequest: idNameRequest}},{new: true})
+    .then((userUpdated) => {
+        res.status(200).json(userUpdated);
+    })
+    .catch((err) => {
+        console.log(err);
+        res.status(500).json("Erreur lors de la demande d'ami");
+    })
+}
+
+module.exports = {followRequest, acceptFollow, refusFollow}
