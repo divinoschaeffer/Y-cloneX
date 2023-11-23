@@ -8,6 +8,9 @@ module.exports = {
       colors:{
         'twitter-blue': '#1DA1F2',
       },
+      fontSize:{
+        'full': '27em',
+      },
     },
   },
   plugins: [],
