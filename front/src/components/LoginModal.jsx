@@ -4,10 +4,24 @@ import axios from 'axios'
 const LoginModal = ({showModal, closeModal}) => {
 
     const [input, setInput] = useState("");
+    const [exist, setExist] = useState(true);
+
+    const isUser = (idName) => {
+        axios.get(`http://localhost:3000/api/user/isUser/${idName}`)
+        .then((response) => {
+            if(!response.data.isUser){
+                setExist(false);
+                setTimeout(() => {
+                    setExist(true);
+                }, 2000);
+            }
+        })
+        .catch((e) => console.log(e))
+    }
 
     return(
         <div 
-        className={`fixed inset-0 bg-white md:bg-gray-800 md:bg-opacity-50 flex md:items-center md:justify-center w-full
+        className={`fixed inset-0 bg-white md:bg-gray-800 md:bg-opacity-50 flex md:items-center md:justify-center w-full flex-col
         ${showModal ? '' : 'hidden'}`}>
             <div className="flex flex-col w-full h-full m-3 space-y-60 md:p-3 md:bg-white md:rounded-xl md:space-y-20 md:w-[37rem] md:h-[40rem]">
                 <section className="flex flex-row items-center justify-between">
@@ -27,7 +41,9 @@ const LoginModal = ({showModal, closeModal}) => {
                     >
 
                     </input>
-                    <button className="text-white font-bold bg-black rounded-full w-3/4 md:w-1/2 h-10">Suivant</button>
+                    <button className="text-white font-bold bg-black rounded-full w-3/4 md:w-1/2 h-10"
+                    onClick={isUser}
+                    >Suivant</button>
                     <button className="font-bold bg-white rounded-full border-gray-300 border w-3/4 md:w-1/2 h-10">Mot de passe oublié ?</button>
                     <div className="flex flex-row">
                         <p className="text-gray-600">Vous n'avez pas de compte ? </p>
@@ -35,6 +51,7 @@ const LoginModal = ({showModal, closeModal}) => {
                     </div>
                 </section>
             </div>
+            <p  className={`text-white bg-twitter-blue my-5 md:w-[25rem] h-10 text-center pt-2 ${!exist ? '' : 'hidden'}`}>Désolé, nous n'avons pas pu trouver votre compte.</p>
         </div>
     )
 }
