@@ -4,6 +4,7 @@ const dotenv =require('dotenv');
 const app = express();
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
+const cors = require('cors')
 const authRoute = require('./routes/auth.js');
 const userRoute = require('./routes/user.js');
 const postRoute = require('./routes/post.js');
@@ -32,6 +33,7 @@ mongoose.connect(process.env.DATABASE_URL)
   });
 
 // Middleware pour gérer les données au format JSON
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 app.use('/api/auth', authRoute);

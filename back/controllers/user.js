@@ -91,4 +91,16 @@ async function getAllPosts(req, res) {
     })
 }
 
-module.exports = {update, getAll, getUser, getAllPosts};
+async function isUser(req, res){
+    const idName = req.params.idName;
+    User.findOne({idName})
+    .then((user) => {
+        if(user)
+            res.status(200).json({isUser: true})
+        else
+            res.status(200).json({isUser: false})
+    })
+    .catch((e) => res.status(500).json({isUser: false}))
+}
+
+module.exports = {update, getAll, getUser, getAllPosts, isUser};
