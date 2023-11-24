@@ -1,11 +1,21 @@
-import react from "react"
+import react, { useState } from "react"
+import LoginModal from "../components/LoginModal";
 
 function Home(){
 
+    const [loginModalOpen, setLoginModalOpen] = useState(false);
+    const openLoginModal = () => {
+        setLoginModalOpen(true);
+      };
+    
+      const closeLoginModal = () => {
+        setLoginModalOpen(false);
+      };
+
     return(
-           <div className="flex flex-col lg:flex-row lg:h-full p-10 lg:p-0 space-y-10 lg:space-y-0">
-                <section className="lg:basis-1/2 lg:h-screen lg:flex lg:justify-center lg:items-center">
-                        <h1 className="text-6xl md:text-8xl lg:text-full">Y</h1>
+           <div className="flex flex-col lg:flex-row lg:h-full p-10 lg:p-0  lg:space-y-0 items-center">
+                <section className="lg:basis-1/2 lg:h-screen lg:flex lg:justify-center lg:items-center mb-10 lg:mb-0 w-full md:w-1/2">
+                        <h1 className="text-6xl md:text-8xl lg:text-full" >Y</h1>
                 </section>
                 <section className="lg:basis-1/2 lg:h-screen flex flex-col lg:space-y-10 space-y-5 justify-center min-h-fit">
                     <div className="lg:space-y-20 space-y-10 ">
@@ -24,12 +34,15 @@ function Home(){
                                 <h3 className="font-semibold text-l mt-10">
                                     Vous avez déjà un compte ?
                                 </h3 >
-                                <button className="h-10 font-bold text-twitter-blue bg-white text-center w-full border border-gray-300  rounded-full hover:bg-twitter-blue/10">
+                                <button className="h-10 font-bold text-twitter-blue bg-white text-center w-full border border-gray-300  rounded-full hover:bg-twitter-blue/10"
+                                    onClick={openLoginModal}
+                                >
                                     Se connecter
                                 </button>
                             </div>
                         </div>     
                 </section>
+                <LoginModal showModal={loginModalOpen} closeModal={closeLoginModal}></LoginModal>
            </div>
     )
 }
