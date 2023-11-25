@@ -36,7 +36,7 @@ const UserSchema = new Schema({
 
     public: {
         type: Boolean,
-        required: true
+        default: true
     },
 
     followRequest:{

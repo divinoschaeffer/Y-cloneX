@@ -21,7 +21,6 @@ async function signIn(req, res) {
         password: hashedPassword,
         birthDate: new Date(req.body.birthDate),
         firstConnection: new Date(),
-        public: req.body.public
     })
         
     
@@ -32,7 +31,7 @@ async function signIn(req, res) {
             token = jwt.sign({
                 _id: req.body._id,
                 idName: req.body.idName,
-                public: req.body.public,
+                public: true,
                 role: req.body.role
             }, secretKey
             ,{expiresIn: '10h'}
@@ -62,37 +61,41 @@ async function login(req, res){
     let loggedUser;
     let token;
 
-    await User.findOne({idName})
+    User.findOne({idName})
         .then((user) => loggedUser = user)
-        .catch((err) =>  {
-            res.status(404).json({message: "Utilisateur non trouvé"});
-            console.log(err);
-        })
-
-    await bcrypt.compare(password, loggedUser.password)
         .then(() => {
-            const secretKey = process.env.TOKEN_KEY;
-            token = jwt.sign({
-                _id: req.body._id,
-                idName: req.body.idName,
-                public: req.body.public,
-                role: req.body.role
-            }, secretKey
-            ,{expiresIn: '10h'}
-            );
-            res.status(201).json({
-                token, 
-                user:
-                {
-                    id: loggedUser._id,
-                    idName: loggedUser.idName, 
-                    public: loggedUser.public, 
-                    role: loggedUser.role}
-                })
-            })
-        .catch((err) => {
+            return bcrypt.compare(password, loggedUser.password)
+        })
+        .then((result) => {
+            if(result){
+                const secretKey = process.env.TOKEN_KEY;
+
+                token = jwt.sign({
+                    _id: req.body._id,
+                    idName: req.body.idName,
+                    public: req.body.public,
+                    role: req.body.role
+                }, secretKey
+                ,{expiresIn: '10h'}
+                );
+
+                res.status(201).json({
+                    token, 
+                    user:
+                    {
+                        id: loggedUser._id,
+                        idName: loggedUser.idName, 
+                        public: loggedUser.public, 
+                        role: loggedUser.role}
+                    })
+            }
+            else{
+                res.status(401).json({message: "Utilisateur non trouvé"});
+            }
+        })
+        .catch((err) =>  {
+            res.status(401).json({message: "Utilisateur non trouvé"});
             console.log(err);
-            res.status(404).json("L'authentification a échoué");
         })
 }
 
