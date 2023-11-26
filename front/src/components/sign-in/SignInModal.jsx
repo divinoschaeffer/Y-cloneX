@@ -17,7 +17,7 @@ const SignInModal = ({showModal, closeModal}) => {
 
     const [alreadyUse, setAlreadyUse] = useState(false);
     const [wrongPassword, setWrongPassword] = useState(false);
-    const [textError, setTextError] = useState("")
+    const [textError, setTextError] = useState("");
 
     const {user, login, logout} = useAuth();
 
@@ -106,7 +106,7 @@ const SignInModal = ({showModal, closeModal}) => {
                 <header className="flex flex-row self-start space-x-10">
                     <button onClick={closeModal}>C</button>
                 </header>
-                <section className="flex flex-col w-[28rem] items-center space-y-5">
+                <section className="flex flex-col md:w-[28rem] items-center space-y-5">
                     <h1 className=" self-start text-3xl font-bold">Créer votre compte</h1>
 
                     <input placeholder="Nom d'utilisateur" onChange={(e) => setUsername(e.target.value)} value={username}
@@ -130,7 +130,7 @@ const SignInModal = ({showModal, closeModal}) => {
                     </div>
                 </section>
                 <footer className="">
-                    <button className={`rounded-full bg-black font-semibold text-white w-[35rem] md:w-[28rem] ${(wrongPassword || alreadyUse)? 'md:mt-2' :'md:mt-16'} h-12 mt-72`}
+                    <button className={`rounded-full bg-black font-semibold text-white w-[24rem] md:w-[28rem] ${(wrongPassword || alreadyUse)? 'md:mt-2' :'md:mt-16'} h-12 mt-72`}
                     onClick={() => createAccount()}
                     >
                         Créer mon compte

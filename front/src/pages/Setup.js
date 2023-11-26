@@ -1,16 +1,27 @@
 import react, { useState } from "react"
 import LoginModal from "../components/login/LoginModal";
+import SignInModal from "../components/sign-in/SignInModal";
 
 function Setup(){
 
     const [loginModalOpen, setLoginModalOpen] = useState(false);
+    const [signInModalOpen, setSignInModalOpen] = useState(false); 
+
     const openLoginModal = () => {
         setLoginModalOpen(true);
-      };
+    };
+
+    const openSignInModal = () => {
+        setSignInModalOpen(true);
+    }
     
-      const closeLoginModal = () => {
+    const closeLoginModal = () => {
         setLoginModalOpen(false);
-      };
+    };
+
+    const closeSignInModal = () => {
+        setSignInModalOpen(false);
+    }
 
     return(
            <div className="flex flex-col lg:flex-row lg:h-full p-10 lg:p-0  lg:space-y-0 items-center">
@@ -23,7 +34,9 @@ function Setup(){
                         <h2 className="md:text-4xl text-xl font-bold">Inscrivez-vous.</h2>
                     </div>
                         <div className="lg:w-1/3 lg:h-1/3 w-80 space-y-1">
-                            <button className="bg-twitter-blue text-white w-full rounded-full font-bold h-10 hover:bg-[#1d9bf0]">
+                            <button className="bg-twitter-blue text-white w-full rounded-full font-bold h-10 hover:bg-[#1d9bf0]"
+                            onClick={openSignInModal}
+                            >
                                 Créer un compte
                             </button>
                             <p className="text-xs text-gray-500">En vous inscrivant, vous acceptez les 
@@ -43,6 +56,7 @@ function Setup(){
                         </div>     
                 </section>
                 <LoginModal showModal={loginModalOpen} closeModal={closeLoginModal}></LoginModal>
+                <SignInModal showModal={signInModalOpen} closeModal={closeSignInModal}></SignInModal>
            </div>
     )
 }

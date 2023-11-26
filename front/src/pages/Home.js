@@ -1,9 +1,11 @@
+import Menu from "../components/Menu";
+
 
 const Home = () => {
 
     return(
-        <div>
-            <p>Hello</p>
+        <div className="flex flex-row w-full">
+            <Menu></Menu>
         </div>
     )
 }
