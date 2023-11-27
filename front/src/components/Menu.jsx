@@ -6,11 +6,13 @@ import messageIcon from '../icons/message.png';
 import moreIcon from '../icons/more.png';
 import notifIcon from '../icons/notification.png';
 import exploreIcon from '../icons/search.png';
+import { useState } from "react";
 
 
-const Menu = () => {
+const Menu = ({openPostModal}) => {
 
     const {user, login, logout} = useAuth();
+    
 
     return (
         <div className="flex flex-col w-1/4 h-screen items-end border-r-2 min-w-[5rem]">
@@ -45,7 +47,9 @@ const Menu = () => {
                     <img src={moreIcon} className="h-7 w-7"></img>
                     <p className="text-xl hidden xl:block">Plus</p>
                 </a>
-                <button className="rounded-full bg-twitter-blue border border-white text-white font-bold xl:w-[14rem] xl:h-[3rem] w-fit flex items-center justify-center">
+                <button className="rounded-full bg-twitter-blue border border-white text-white font-bold xl:w-[14rem] xl:h-[3rem] w-fit flex items-center justify-center"
+                onClick={() => openPostModal()}
+                >
                     <p className="hidden xl:block">Poster</p>
                     <p className="text-4xl xl:hidden pb-2 px-3">+</p>
                 </button>
