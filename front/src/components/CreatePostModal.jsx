@@ -21,7 +21,6 @@ const CreatePostModal = ({closeModal, modalOpen}) => {
         .catch((err) => console.log(err));
     }
 
-    console.log(user)
 
     return (
         <div className={`fixed inset-0 bg-white md:bg-gray-800 md:bg-opacity-50 flex md:items-center md:justify-center w-full flex-col ${(modalOpen) ? '' : 'hidden'}`}>
