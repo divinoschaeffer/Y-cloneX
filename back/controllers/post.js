@@ -130,4 +130,15 @@ async function signetPost(req, res) {
         })
 }
 
-module.exports = { createPost, deletePost, likePost, signetPost };
+async function getAll(req, res){
+    Post.find()
+    .then((posts) => {
+        res.status(200).json(posts);
+    })
+    .catch((err) => {
+        console.log(err);
+        res.status(500).json("Erreur de récupération des posts");
+    })
+}
+
+module.exports = { createPost, deletePost, likePost, signetPost, getAll };
