@@ -32,10 +32,10 @@ mongoose.connect(process.env.DATABASE_URL)
     console.log('Déconnexion de MongoDB');
   });
 
-// Middleware pour gérer les données au format JSON
+
 const corsOptions = {
-  origin: true, //included origin as true
-  credentials: true, //included credentials as true
+  origin: true,
+  credentials: true, 
 };
 app.use(cors(corsOptions));
 app.use(express.json());
