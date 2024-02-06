@@ -33,7 +33,11 @@ mongoose.connect(process.env.DATABASE_URL)
   });
 
 // Middleware pour gérer les données au format JSON
-app.use(cors());
+const corsOptions = {
+  origin: true, //included origin as true
+  credentials: true, //included credentials as true
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 app.use('/api/auth', authRoute);
