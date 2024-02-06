@@ -40,11 +40,11 @@ async function signIn(req, res) {
             res.cookie('token', token, {httpOnly: true});
 
             res.status(201).json({
-                token, 
                 user:
                 {
                     id: savedUser._id,
-                    idName: savedUser.idName, 
+                    idName: savedUser.idName,
+                    username: savedUser.username, 
                     public: savedUser.public, 
                     role: savedUser.role}
                 })
@@ -79,12 +79,14 @@ async function login(req, res){
                 ,{expiresIn: '10h'}
                 );
 
-                res.status(201).json({
-                    token, 
+                res.cookie('token', token, {httpOnly: true});
+
+                res.status(201).json({ 
                     user:
                     {
                         id: loggedUser._id,
-                        idName: loggedUser.idName, 
+                        idName: loggedUser.idName,
+                        username: loggedUser.username, 
                         public: loggedUser.public, 
                         role: loggedUser.role}
                     })

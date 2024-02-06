@@ -16,8 +16,9 @@ const SecondStepLogin = ({idName, displayError}) =>{
             "idName": idName,
             "password": password
         }
-        axios.post(`http://localhost:3000/api/auth/login`, data)
+        axios.post(`http://localhost:3000/api/auth/login`, data, {withCredentials: true})
         .then((response) => {
+            console.log(response.data.user)
             login(response.data.user);
             navigate('/home', {replace: true});
         })  

@@ -5,17 +5,19 @@ import axios from "axios";
 
 const CreatePostModal = ({closeModal, modalOpen}) => {
 
-    const {user, login, logout} = useAuth();
+    const {user} = useAuth();
     const [text, setText] = useState("");
 
     const createPost = () =>{
         const data = {
-            'idName': user.idName,
             'username': user.username,
             'text': text,
         };
-        axios.post('http://localhost:3000/api/post/create', data)
-        .then(() => closeModal())
+        axios.post('http://localhost:3000/api/post/create', data, {withCredentials: true})
+        .then(() => {
+            setText("");
+            closeModal();
+        })
         .catch((err) => console.log(err));
     }
 

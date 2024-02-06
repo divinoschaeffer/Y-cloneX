@@ -12,9 +12,8 @@ function verifTokenUser(req, res, next){
     }
 
       try {
-    
         const user = jwt.verify(token, process.env.TOKEN_KEY);
-        req.user = user; // utiliser req.user.user pour l'utiliser... je sais... il était tard...
+        req.user = user;
         
         next();
       } catch (erreur) {
