@@ -15,7 +15,7 @@ const Menu = ({openPostModal}) => {
     
 
     return (
-        <div className="flex flex-col w-1/4 h-screen items-end border-r-2 min-w-[5rem]">
+        <div className="flex flex-col w-1/4 h-screen items-end border-r-2 min-w-[5rem] sticky top-0">
             <div className=" mr-1 xl:mr-8 space-y-4 flex flex-col items-center xl:items-start">
                 <h1 className="text-4xl text-center font-bold border border-white hover:rounded-full hover:bg-gray-200 w-fit py-2 px-4">Y</h1>
                 <a className="flex flex-row space-x-4 items-center border border-white hover:border hover:rounded-full hover:bg-gray-200 w-fit py-2 px-4" href="/home">

@@ -3,7 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import closeIcon from "../icons/close.png";
 import axios from "axios";
 
-const CreatePostModal = ({closeModal, modalOpen}) => {
+const CreatePostModal = ({closeModal, modalOpen, getPosts}) => {
 
     const {user} = useAuth();
     const [text, setText] = useState("");
@@ -17,11 +17,11 @@ const CreatePostModal = ({closeModal, modalOpen}) => {
         .then(() => {
             setText("");
             closeModal();
+            getPosts();
         })
         .catch((err) => console.log(err));
     }
 
-    console.log(user)
 
     return (
         <div className={`fixed inset-0 bg-white md:bg-gray-800 md:bg-opacity-50 flex md:items-center md:justify-center w-full flex-col ${(modalOpen) ? '' : 'hidden'}`}>

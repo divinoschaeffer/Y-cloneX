@@ -29,8 +29,10 @@ async function getUser(req, res){
 
     User.find({idName})
         .then((user) => {
-            if (idName === req.user.user.idName || req.user.user.role > 0)
-                res.status(201).json(user);
+            if (idName === req.user.idName || req.user.user.role > 0){
+                const {password, ...newUser} = user[0]._doc;
+                res.status(201).json(newUser);
+            }
             else {
                 const {role, _id, signets, conversation, __v, password, ...newUser} = user[0]._doc;
                 res.status(201).json(newUser);
