@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 const SecondStepLogin = ({idName, displayError}) =>{
 
     const [password, setPassword] = useState ("");
-    const {user, login, logout} = useAuth();
+    const {login} = useAuth();
     const navigate = useNavigate();
 
     const setupLogin = () => {
@@ -18,7 +18,6 @@ const SecondStepLogin = ({idName, displayError}) =>{
         }
         axios.post(`http://localhost:3000/api/auth/login`, data, {withCredentials: true})
         .then((response) => {
-            console.log(response.data.user)
             login(response.data.user);
             navigate('/home', {replace: true});
         })  
