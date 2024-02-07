@@ -42,7 +42,7 @@ async function createPost(req, res) {
 }
 
 async function deletePost(req, res) {
-    const currentUser = req.user.user;
+    const currentUser = req.user;
     const id = new mongoose.Types.ObjectId(req.params.id);
     const idName = currentUser.idName;
 
@@ -67,7 +67,7 @@ async function deletePost(req, res) {
 }
 
 async function likePost(req, res) {
-    const currentUser = req.user.user;
+    const currentUser = req.user;
     const idName = currentUser.idName;
     const idPost = req.params.id;
     const mongooseIdPost = new mongoose.Types.ObjectId(idPost);
