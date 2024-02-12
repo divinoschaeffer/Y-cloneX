@@ -1,9 +1,21 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
+import InputModal from "../InputModal";
 
 const Post = ({ post, getPosts }) => {
     const { user } = useAuth();
+    const [postModalOpen, setPostModalOpen] = useState(false);
+    const [input, setInput] = useState("");
+
+
+    const openPostModal = () => {
+        setPostModalOpen(true);
+    }
+
+    const closePostModal = () => {
+        setPostModalOpen(false);
+    }
 
     async function likePost(){
         await axios.put('http://localhost:3000/api/post/like/' + post._id, {}, {withCredentials: true})
@@ -25,6 +37,21 @@ const Post = ({ post, getPosts }) => {
                 console.log(err);
             })
         }
+    }
+
+    async function retweetPost(){
+        const data = {
+            'username': user.username,
+            'text': input,
+            'retweetOf': post._id
+        };
+        axios.post('http://localhost:3000/api/post/create', data, {withCredentials: true})
+        .then(() => {
+            setInput("");
+            closePostModal();
+            getPosts();
+        })
+        .catch((err) => console.log(err));
     }
 
     function formatDate(dateString) {
@@ -55,9 +82,10 @@ const Post = ({ post, getPosts }) => {
             </div>
             <div className="flex justify-evenly">
                 <button>c {post.comments.length}</button>
-                <button>r {post.retweets}</button>
+                <button onClick={() => openPostModal()}>r {post.retweets}</button>
                 <button onClick={likePost}>l {post.likes}</button>
             </div>
+            <InputModal closeModal={closePostModal} modalOpen={postModalOpen} input={input} inputSubmit={retweetPost} setInput={setInput}></InputModal>
         </div>
     )
 }
