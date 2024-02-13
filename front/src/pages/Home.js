@@ -53,7 +53,7 @@ const Home = () => {
     return (
         <div className="flex flex-row w-full">
             <Menu openPostModal={openPostModal} ></Menu>
-            <ListPosts listPosts={listPosts} getPosts={getPosts}></ListPosts>
+            <ListPosts listPosts={listPosts} getPosts={getPosts} ></ListPosts>
             <CreatePostModal closeModal={closePostModal} modalOpen={postModalOpen} getPosts={getPosts}></CreatePostModal>
         </div>
     )

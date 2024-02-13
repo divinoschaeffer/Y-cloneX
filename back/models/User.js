@@ -58,6 +58,11 @@ const UserSchema = new Schema({
         type: [{ type: mongoose.Schema.ObjectId, ref: 'Post' }], // Définit le type comme un tableau d'ObjectId
         default: [], 
     },
+
+    retweets:{
+        type: [{ type: mongoose.Schema.ObjectId, ref: 'Post' }], // Définit le type comme un tableau d'ObjectId
+        default: [], 
+    },
         
     likes: {
         type: [{ type: mongoose.Schema.ObjectId, ref: 'Post' }], // Définit le type comme un tableau d'ObjectId
