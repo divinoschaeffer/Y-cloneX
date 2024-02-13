@@ -7,28 +7,40 @@ async function createPost(req, res) {
     const currentUser = req.user;
     const idName = currentUser.idName;
     const idPostResponseTo = req.body.responseTo;
-    const post = new Post({
+    const idPostRetweet = req.body.retweetOf;
+    let post = {
         idName: idName,
         username: req.body.username,
         text: req.body.text,
         creationDate: new Date()
-    });
+    };
 
-    if (idPostResponseTo != undefined){
+    if (idPostResponseTo) {
         post.responseTo = new mongoose.Types.ObjectId(idPostResponseTo);
     }
 
-    post.save()
+    if (idPostRetweet) {
+        post.retweetOf = new mongoose.Types.ObjectId(idPostRetweet);
+    }
+
+    new Post(post).save()
         .then((post) => {
             const update = { $push: { posts: post._id } };
             if (idPostResponseTo != undefined) {
                 Post.findByIdAndUpdate(idPostResponseTo, { $push: { comments: new mongoose.Types.ObjectId(idPostResponseTo) } })
                     .then(() => {
-                        User.findOneAndUpdate({ idName }, { $push: { posts: post._id, comments: post_id } }, { new: true })
+                        User.findOneAndUpdate({ idName }, { $push: { posts: post._id, comments: post._id } }, { new: true })
                             .then((user) => res.status(200).json(user));
                     })
             }
-            else{ 
+            else if (idPostRetweet) {
+                Post.findByIdAndUpdate(idPostRetweet, { $inc: { retweets: +1 } })
+                    .then(() => {
+                        User.findOneAndUpdate({ idName }, { $push: { posts: post._id, retweets: post._id } }, { new: true })
+                            .then((user) => res.status(200).json(user));
+                    })
+            }
+            else {
                 User.findOneAndUpdate({ idName }, update, { new: true })
                     .then((user) => res.status(200).json(user));
             }
@@ -99,7 +111,7 @@ async function likePost(req, res) {
 }
 
 async function signetPost(req, res) {
-    const currentUser = req.user.user;
+    const currentUser = req.user;
     const idName = currentUser.idName;
     const idPost = req.params.id;
     const mongooseIdPost = new mongoose.Types.ObjectId(idPost);
@@ -130,15 +142,26 @@ async function signetPost(req, res) {
         })
 }
 
-async function getAll(req, res){
+async function getAll(req, res) {
     Post.find()
-    .then((posts) => {
-        res.status(200).json(posts);
-    })
-    .catch((err) => {
-        console.log(err);
-        res.status(500).json("Erreur de récupération des posts");
-    })
+        .then((posts) => {
+            res.status(200).json(posts);
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(500).json("Erreur de récupération des posts");
+        })
 }
 
-module.exports = { createPost, deletePost, likePost, signetPost, getAll };
+async function getPost(req, res) {
+    const idPost = req.params.id
+    Post.findById(idPost)
+        .then((post) => {
+            res.status(200).json(post);
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+}
+
+module.exports = { createPost, deletePost, likePost, signetPost, getAll, getPost };
