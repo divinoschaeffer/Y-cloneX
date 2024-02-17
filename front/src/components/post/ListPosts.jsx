@@ -3,7 +3,11 @@ import Post from "./Post";
 
 const ListPosts  = ({listPosts, getPosts}) => {
 
-    const list = listPosts.map((post) => <Post post={post} getPosts={getPosts} key={post._id}></Post>);
+    const list = listPosts.map((post) => {
+        if(post!=null){
+            return <Post post={post} getPosts={getPosts} key={post._id}></Post>;
+        }
+    });
     list.reverse();
 
     return(
