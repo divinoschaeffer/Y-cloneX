@@ -2,29 +2,31 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 import InputModal from "./InputModal";
+import { createPost } from "../services/postServices";
 
 const CreatePostModal = ({closeModal, modalOpen, getPosts}) => {
 
     const {user} = useAuth();
     const [text, setText] = useState("");
 
-    const createPost = () =>{
+    async function publishPost(){
         const data = {
             'username': user.username,
             'text': text,
         };
-        axios.post('http://localhost:3000/api/post/create', data, {withCredentials: true})
-        .then(() => {
+        try {
+            const post = await createPost(data);
             setText("");
             closeModal();
             getPosts();
-        })
-        .catch((err) => console.log(err));
+        } catch (error) {
+            console.log(error);
+        }
     }
 
 
     return (
-        <InputModal closeModal={closeModal} modalOpen={modalOpen} input={text} setInput={setText} inputSubmit={createPost}></InputModal>
+        <InputModal closeModal={closeModal} modalOpen={modalOpen} input={text} setInput={setText} inputSubmit={publishPost}></InputModal>
     )
 }
 

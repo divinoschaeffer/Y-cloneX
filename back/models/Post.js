@@ -45,7 +45,8 @@ const PostSchema = new Schema({
         default: [], 
     },
     responseTo:{
-        type: { type: mongoose.Schema.ObjectId, ref: 'Post' }, // Définit le type comme un tableau d'ObjectId
+        type: [{ type: mongoose.Schema.ObjectId, ref: 'Post' }],
+        default: []
     },
     retweetOf:{
         type: [{ type: mongoose.Schema.ObjectId, ref: 'Post' }], // Définit le type comme un tableau d'ObjectId
