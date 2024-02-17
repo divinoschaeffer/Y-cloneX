@@ -9,7 +9,8 @@ const InputModal = ({closeModal, modalOpen, input, setInput, inputSubmit}) => {
                     <button onClick={() => closeModal()}>
                         <img src={closeIcon} className="h-4 w-4"></img>
                     </button>
-                    <button className="rounded-full bg-twitter-blue text-white font-bold w-[5rem] h-[2rem]"
+                    <button className="rounded-full bg-twitter-blue text-white font-bold w-[5rem] h-[2rem] disabled:opacity-50"
+                    disabled={input === ''}
                     onClick={() => inputSubmit()}
                     >Poster</button>
                 </div>
