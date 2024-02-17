@@ -26,23 +26,23 @@ async function createPost(req, res) {
     new Post(post).save()
         .then((post) => {
             const update = { $push: { posts: post._id } };
-            if (idPostResponseTo != undefined) {
-                Post.findByIdAndUpdate(idPostResponseTo, { $push: { comments: new mongoose.Types.ObjectId(idPostResponseTo) } })
-                    .then(() => {
+            if (idPostResponseTo) {
+                Post.findByIdAndUpdate(idPostResponseTo, { $push: { comments: new mongoose.Types.ObjectId(post._id) } }, {new: true})
+                    .then((updatedPost) => {
                         User.findOneAndUpdate({ idName }, { $push: { posts: post._id, comments: post._id } }, { new: true })
-                            .then((user) => res.status(200).json(user));
+                            .then((user) => res.status(200).json(post));
                     })
             }
             else if (idPostRetweet) {
-                Post.findByIdAndUpdate(idPostRetweet, { $inc: { retweets: +1 } })
+                Post.findByIdAndUpdate(idPostRetweet, { $inc: { retweets: +1 } }, {new: true})
                     .then(() => {
                         User.findOneAndUpdate({ idName }, { $push: { posts: post._id, retweets: post._id } }, { new: true })
-                            .then((user) => res.status(200).json(user));
+                            .then((user) => res.status(200).json(post));
                     })
             }
             else {
                 User.findOneAndUpdate({ idName }, update, { new: true })
-                    .then((user) => res.status(200).json(user));
+                    .then((user) => res.status(200).json(post));
             }
         })
 
@@ -58,6 +58,13 @@ async function deletePost(req, res) {
     const id = new mongoose.Types.ObjectId(req.params.id);
     const idName = currentUser.idName;
 
+    /*Post.findById(id)
+        .then((post) => {
+            if(post.responseTo){
+                Post.findByIdAndUpdate(post.responseTo, { $pull: {comments: id }})
+            }
+        })*/
+
     User.findOne({ idName })
         .then((user) => {
             if (user.posts.includes(id)) {
@@ -65,12 +72,12 @@ async function deletePost(req, res) {
                     .then(() => {
                         User.findByIdAndUpdate(user._id, { $pull: { posts: id } }, { new: true })
                             .then((userUpdated) => {
-                                res.status(200).json(userUpdated);
+                                res.status(200);
                             })
                     })
             }
             else
-                res.status(200).json(user);
+                res.status(200);
         })
         .catch((err) => {
             console.log(err);
