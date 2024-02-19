@@ -43,7 +43,7 @@ const SignInModal = ({showModal, closeModal}) => {
     const isUser = (idName) => {
         if(/\s+/.test(idName) || idName === "")
             displayAlreadyUse();
-        axios.get(`http://localhost:3000/api/user/isUser/${idName}`)
+        axios.get(`http://localhost:3000/api/user/isUser/${idName}`, {withCredentials: true})
         .then((response) => {
             if(response.data.isUser){
                 displayAlreadyUse();
@@ -87,7 +87,7 @@ const SignInModal = ({showModal, closeModal}) => {
                 'password': password,
                 'birthDate': formattedDate
             };
-            axios.post('http://localhost:3000/api/auth/sign-in', data)
+            axios.post('http://localhost:3000/api/auth/sign-in', data, {withCredentials: true})
             .then((response) => {
                 login(response.data.user);
                 navigate('/home',{replace: true});
