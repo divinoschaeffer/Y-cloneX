@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import axios from "axios";
 import InputModal from "./InputModal";
 import { createPost } from "../services/postServices";
 
@@ -15,7 +14,7 @@ const CreatePostModal = ({closeModal, modalOpen, getPosts}) => {
             'text': text,
         };
         try {
-            const post = await createPost(data);
+            await createPost(data);
             setText("");
             closeModal();
             getPosts();

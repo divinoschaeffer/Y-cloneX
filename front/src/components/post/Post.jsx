@@ -14,7 +14,10 @@ const Post = ({ post, getPosts }) => {
 
     const navigate = useNavigate();
 
-    const openPostModal = () => {
+    const openPostModal = (e) => {
+        e.stopPropagation();
+        e.nativeEvent.stopImmediatePropagation();
+        e.preventDefault();
         setPostModalOpen(true);
     }
 
@@ -35,7 +38,7 @@ const Post = ({ post, getPosts }) => {
         e.nativeEvent.stopImmediatePropagation();
         e.preventDefault();
 
-        if (post.username == user.username) {
+        if (post.username === user.username) {
             try {
                 await deletePost(post._id);
                 getPosts();
@@ -55,7 +58,7 @@ const Post = ({ post, getPosts }) => {
             'retweetOf': post._id
         };
         try {
-            const post = await createPost(data);
+            await createPost(data);
             setInput("");
             closePostModal();
             getPosts();
@@ -128,7 +131,7 @@ const Post = ({ post, getPosts }) => {
         if (!originPost) {
             displayOriginPost();
         }
-    }, [])
+    })
 
     return (
         <div className=" py-5 px-4 h-auto hover:bg-slate-50 w-full border-b border-r flex flex-col" onClick={(e) => handleNavigation(e,"/post/" + post._id)}>
@@ -139,7 +142,7 @@ const Post = ({ post, getPosts }) => {
                         <a className="font-bold hover:underline text-lg" href="#" onClick={(e) => {handleNavigation(e,"/profile/" + post.idName)}}>{post.username}</a>
                         <p className="text-gray-500" onClick={(e) => {handleNavigation(e,"/profile/" + post.idName)}}>@{post.idName} ~ {formatDate(post.creationDate)}</p>
                     </div>
-                    {(post.username == user.username) ? <button onClick={removePost}>s</button> : null}
+                    {(post.username === user.username) ? <button onClick={removePost}>s</button> : null}
                 </div>
                 <p>{post.text}</p>
             </div>

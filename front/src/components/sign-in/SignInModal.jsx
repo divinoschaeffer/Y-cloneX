@@ -19,7 +19,7 @@ const SignInModal = ({showModal, closeModal}) => {
     const [wrongPassword, setWrongPassword] = useState(false);
     const [textError, setTextError] = useState("");
 
-    const {user, login, logout} = useAuth();
+    const { login } = useAuth();
 
     const navigate = useNavigate();
 

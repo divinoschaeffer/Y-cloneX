@@ -3,7 +3,7 @@ import Post from "./Post";
 import { createPost, getPost } from "../../services/postServices";
 import ListPosts from "./ListPosts";
 import { useAuth } from "../../context/AuthContext";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const OpenPost = ({ post, fetchPost }) => {
     const { user } = useAuth();
@@ -22,9 +22,7 @@ const OpenPost = ({ post, fetchPost }) => {
     }
 
     useEffect(() => {
-        if (1) {
-            fetchComments();
-        }
+        fetchComments();
     }, [post, id])
 
     async function createComment(){
@@ -34,7 +32,7 @@ const OpenPost = ({ post, fetchPost }) => {
             'responseTo': post._id
         };
         try {
-            const post = await createPost(data);
+            await createPost(data);
             fetchPost();
             setInput("");
         } catch (error) {

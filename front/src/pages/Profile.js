@@ -36,7 +36,7 @@ const Profile = () => {
     return (
         <div className="flex flex-row w-full h-full">
             <Menu openPostModal={openPostModal}></Menu>
-            {(user) ? <ProfileComp user={user} fetchUser={fetchUser}></ProfileComp> : null}
+            {(user) ? <ProfileComp chosenUser={user} fetchUser={fetchUser}></ProfileComp> : null}
             <CreatePostModal closeModal={closePostModal} modalOpen={postModalOpen} getPosts={fetchUser}></CreatePostModal>
         </div>
     )

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { getPost } from "../services/postServices";
 import ListPosts from "./post/ListPosts";
-import { useAuth } from "../context/AuthContext";
 import EditProfileModal from "./EditProfileModal";
+import { useAuth } from "../context/AuthContext";
 
 
-const ProfileComp = ({ user, fetchUser }) => {
+const ProfileComp = ({ chosenUser, fetchUser }) => {
+    const {user} = useAuth();
     const [typePosts, setTypePosts] = useState(0);
     const [posts, setPosts] = useState([]);
     const [editModalOpen, setEditModalOpen] = useState(false);
@@ -32,13 +33,13 @@ const ProfileComp = ({ user, fetchUser }) => {
     async function selectPosts(){
         switch (typePosts) {
             case 0:
-                await fetchPosts(user.posts.slice(0,40));
+                await fetchPosts(chosenUser.posts.slice(0,40));
                 break;
             case 1:
-                await fetchPosts(user.comments.slice(0,40));
+                await fetchPosts(chosenUser.comments.slice(0,40));
                 break;
             case 2:
-                await fetchPosts(user.likes.slice(0,40));
+                await fetchPosts(chosenUser.likes.slice(0,40));
                 break;
             default:
                 break;
@@ -52,19 +53,19 @@ const ProfileComp = ({ user, fetchUser }) => {
     return (
         <div className="w-full border-r">
             <div className="pl-10 sticky top-0 bg-white bg-opacity-90">
-                <h1 className="text-xl font-bold">{user.idName}</h1>
-                <p className="text-sm text-gray-600 font-light">{user.posts.length} posts</p>
+                <h1 className="text-xl font-bold">{chosenUser.idName}</h1>
+                <p className="text-sm text-gray-600 font-light">{chosenUser.posts.length} posts</p>
             </div>
             <div className="px-4 space-y-4 border-b">
                 <div className="flex justify-between">
                     <div>
-                        <h1 className="text-xl font-bold">{user.username}</h1>
-                        <p className="text-l text-gray-600 font-light">@{user.idName}</p>
+                        <h1 className="text-xl font-bold">{chosenUser.username}</h1>
+                        <p className="text-l text-gray-600 font-light">@{chosenUser.idName}</p>
                     </div>
-                    {(user.idName) ? <button className="font-bold border rounded-full px-4" onClick={() => openEditModal()}>Editer le profil</button> : null}
+                    {(chosenUser.idName === user.idName) ? <button className="font-bold border rounded-full px-4" onClick={() => openEditModal()}>Editer le profil</button> : null}
                 </div>
                
-                <p>{user.bio}</p>
+                <p>{chosenUser.bio}</p>
                 <div className="flex h-[3rem]">
                     <button className={"hover:bg-slate-200 flex-1" + (typePosts === 0 ? " font-bold border-b-2 border-twitter-blue" : "")} onClick={() => setTypePosts(0)}>
                         Posts
@@ -78,7 +79,7 @@ const ProfileComp = ({ user, fetchUser }) => {
                 </div>
             </div>
             {(posts) ? <ListPosts listPosts={posts} getPosts={() => {}}></ListPosts> : null}
-            <EditProfileModal closeModal={closeEditModal} modalOpen={editModalOpen} user={user} fetchUser={fetchUser}></EditProfileModal>
+            <EditProfileModal closeModal={closeEditModal} modalOpen={editModalOpen} user={chosenUser} fetchUser={fetchUser}></EditProfileModal>
         </div>
     )
 
