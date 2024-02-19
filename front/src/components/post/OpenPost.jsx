@@ -44,7 +44,7 @@ const OpenPost = ({ post, fetchPost }) => {
 
 
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col w-full">
             <div className="flex border-r space-x-8 pl-4">
                 <h1 className="font-bold text-xl">Poster</h1>
             </div>

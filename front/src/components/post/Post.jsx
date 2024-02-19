@@ -14,7 +14,6 @@ const Post = ({ post, getPosts }) => {
 
     const navigate = useNavigate();
 
-
     const openPostModal = () => {
         setPostModalOpen(true);
     }
@@ -132,13 +131,13 @@ const Post = ({ post, getPosts }) => {
     }, [])
 
     return (
-        <div className=" py-5 px-4 h-auto hover:bg-slate-50 md:w-[36rem] border-b border-r flex flex-col" onClick={(e) => handleNavigation(e,"/post/" + post._id)}>
+        <div className=" py-5 px-4 h-auto hover:bg-slate-50 w-full border-b border-r flex flex-col" onClick={(e) => handleNavigation(e,"/post/" + post._id)}>
             {(originPost) ? <p>En réponse à un <a className="text-twitter-blue hover:underline" href="#" onClick={(e) => handleNavigation(e,"/post/" + originPost._id)}>post</a> de <a>@{originPost.idName}</a></p> : null}
             <div className="">
                 <div className="flex justify-between">
                     <div className="flex justify-start space-x-2 place-items-center">
-                        <a className="font-bold hover:underline text-lg">{post.username}</a>
-                        <p className="text-gray-500">@{post.idName} ~ {formatDate(post.creationDate)}</p>
+                        <a className="font-bold hover:underline text-lg" href="#" onClick={(e) => {handleNavigation(e,"/profile/" + post.idName)}}>{post.username}</a>
+                        <p className="text-gray-500" onClick={(e) => {handleNavigation(e,"/profile/" + post.idName)}}>@{post.idName} ~ {formatDate(post.creationDate)}</p>
                     </div>
                     {(post.username == user.username) ? <button onClick={removePost}>s</button> : null}
                 </div>
