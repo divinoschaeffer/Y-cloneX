@@ -2,7 +2,6 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const User = require('../models/User')
 const jwt = require('jsonwebtoken')
-const cookieParser = require('cookie-parser')
 
 // Enregistrement d'un nouvel utilisateur
 async function signIn(req, res) {
