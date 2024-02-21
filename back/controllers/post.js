@@ -8,6 +8,7 @@ async function createPost(req, res) {
     const idName = currentUser.idName;
     const idPostResponseTo = req.body.responseTo;
     const idPostRetweet = req.body.retweetOf;
+    const image = req.body.image;
     let post = {
         idName: idName,
         username: req.body.username,
@@ -22,19 +23,22 @@ async function createPost(req, res) {
     if (idPostRetweet) {
         post.retweetOf = new mongoose.Types.ObjectId(idPostRetweet);
     }
+    if (image) {
+        post.image = image;
+    }
 
     new Post(post).save()
         .then((post) => {
             const update = { $push: { posts: post._id } };
             if (idPostResponseTo) {
-                Post.findByIdAndUpdate(idPostResponseTo, { $push: { comments: new mongoose.Types.ObjectId(post._id) } }, {new: true})
+                Post.findByIdAndUpdate(idPostResponseTo, { $push: { comments: new mongoose.Types.ObjectId(post._id) } }, { new: true })
                     .then((updatedPost) => {
                         User.findOneAndUpdate({ idName }, { $push: { posts: post._id, comments: post._id } }, { new: true })
                             .then((user) => res.status(200).json(post));
                     })
             }
             else if (idPostRetweet) {
-                Post.findByIdAndUpdate(idPostRetweet, { $inc: { retweets: +1 } }, {new: true})
+                Post.findByIdAndUpdate(idPostRetweet, { $inc: { retweets: +1 } }, { new: true })
                     .then(() => {
                         User.findOneAndUpdate({ idName }, { $push: { posts: post._id, retweets: post._id } }, { new: true })
                             .then((user) => res.status(200).json(post));
@@ -58,31 +62,30 @@ async function deletePost(req, res) {
     const id = new mongoose.Types.ObjectId(req.params.id);
     const idName = currentUser.idName;
 
-    /*Post.findById(id)
-        .then((post) => {
-            if(post.responseTo){
-                Post.findByIdAndUpdate(post.responseTo, { $pull: {comments: id }})
-            }
-        })*/
+    try {
+        const user = await User.findOne({ idName });
 
-    User.findOne({ idName })
-        .then((user) => {
-            if (user.posts.includes(id)) {
-                Post.findByIdAndDelete(id)
-                    .then(() => {
-                        User.findByIdAndUpdate(user._id, { $pull: { posts: id } }, { new: true })
-                            .then((userUpdated) => {
-                                res.status(200);
-                            })
-                    })
-            }
-            else
-                res.status(200);
-        })
-        .catch((err) => {
-            console.log(err);
-            res.status(500).json("Echec de la suppression du post")
-        })
+        if (!user) {
+            return res.status(404).json("Utilisateur non trouvé");
+        }
+
+        if (user.posts.includes(id)) {
+            await Post.findByIdAndDelete(id);
+
+            await User.findByIdAndUpdate(
+                user._id,
+                { $pull: { posts: id } },
+                { new: true }
+            );
+
+            return res.status(200).json({success: true});
+        } else {
+            return res.status(200).json("Le post n'appartient pas à cet utilisateur");
+        }
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json("Echec de la suppression du post");
+    }
 }
 
 async function likePost(req, res) {

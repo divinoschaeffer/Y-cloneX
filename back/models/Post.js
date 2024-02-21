@@ -13,8 +13,6 @@ const PostSchema = new Schema({
         required: true
     },
 
-    profileImage: String,
-
     text: String,
 
     creationDate: Date,
@@ -34,14 +32,12 @@ const PostSchema = new Schema({
         default: 0
     },
 
-    //TODO: mettre en place les citations (faire attention à si user est en public ou non)
-
     comments: {
         type: [{ type: mongoose.Schema.ObjectId, ref: 'Post' }], // Définit le type comme un tableau d'ObjectId
         default: [], 
     },
-    imagesOrVideos: {
-        type: [{ type: mongoose.Schema.ObjectId, ref: 'Image' }], // Définit le type comme un tableau d'ObjectId
+    image: {
+        type: [String],
         default: [], 
     },
     responseTo:{
