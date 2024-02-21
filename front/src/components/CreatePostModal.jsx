@@ -7,15 +7,18 @@ const CreatePostModal = ({closeModal, modalOpen, getPosts}) => {
 
     const {user} = useAuth();
     const [text, setText] = useState("");
+    const [image, setImage] = useState("");
 
     async function publishPost(){
         const data = {
             'username': user.username,
             'text': text,
+            'image': image
         };
         try {
-            await createPost(data);
+            const post = await createPost(data);
             setText("");
+            setImage("");
             closeModal();
             getPosts();
         } catch (error) {
@@ -25,7 +28,14 @@ const CreatePostModal = ({closeModal, modalOpen, getPosts}) => {
 
 
     return (
-        <InputModal closeModal={closeModal} modalOpen={modalOpen} input={text} setInput={setText} inputSubmit={publishPost}></InputModal>
+        <InputModal 
+        closeModal={closeModal} 
+        modalOpen={modalOpen} 
+        input={text} 
+        setInput={setText} 
+        inputSubmit={publishPost}
+        setImage={setImage}
+        ></InputModal>
     )
 }
 

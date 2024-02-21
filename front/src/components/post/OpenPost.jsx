@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Post from "./Post";
 import { createPost, getPost } from "../../services/postServices";
+import { downloadImage } from "../../services/imageServices";
 import ListPosts from "./ListPosts";
 import { useAuth } from "../../context/AuthContext";
 import { useParams } from "react-router-dom";
@@ -8,6 +9,7 @@ import { useParams } from "react-router-dom";
 const OpenPost = ({ post, fetchPost }) => {
     const { user } = useAuth();
     const [input, setInput] = useState('');
+    const [image, setImage] = useState('');
     const [comments, setComments] = useState([]);
     let {id} = useParams();
 
@@ -29,12 +31,22 @@ const OpenPost = ({ post, fetchPost }) => {
         const data = {
             'username': user.username,
             'text': input,
-            'responseTo': post._id
+            'responseTo': post._id,
+            'image': image
         };
         try {
             await createPost(data);
             fetchPost();
             setInput("");
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function uploadImageAPI(e){
+        try {
+            const data = await downloadImage(e);
+            setImage(data);
         } catch (error) {
             console.log(error);
         }
@@ -62,12 +74,13 @@ const OpenPost = ({ post, fetchPost }) => {
                     </textarea>
                     <button
                         className="rounded-full bg-twitter-blue text-white font-bold w-[6rem] h-[2rem] disabled:opacity-50"
-                        disabled={input === ''}
+                        disabled={input === '' && image === ''}
                         onClick={createComment}
                     >
                         Répondre
                     </button>
                 </div>
+                <input type="file" onChange={(e) => uploadImageAPI(e)}></input>
             </div>
             {(comments != []) ? <ListPosts listPosts={comments} getPosts={fetchComments}></ListPosts> : null}
         </div>

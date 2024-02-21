@@ -9,34 +9,37 @@ const Post = ({ post, getPosts }) => {
     const { user } = useAuth();
     const [postModalOpen, setPostModalOpen] = useState(false);
     const [input, setInput] = useState("");
+    const [imageName, setImageName] = useState('');
+    const [isZoomed, setIsZoomed] = useState(false);
     const [subPost, setSubPost] = useState(null);
     const [originPost, setOriginPost] = useState(null);
 
     const navigate = useNavigate();
 
-    const openPostModal = (e) => {
+    function openPostModal(e){
         e.stopPropagation();
-        e.nativeEvent.stopImmediatePropagation();
-        e.preventDefault();
         setPostModalOpen(true);
     }
 
-    const closePostModal = () => {
+    const closePostModal = (e) => {
         setPostModalOpen(false);
+    }
+
+    function toggleZoom(e){
+        e.stopPropagation();
+        e.nativeEvent.stopImmediatePropagation();
+        setIsZoomed(!isZoomed);
     }
 
     async function like(e) {
         e.stopPropagation();
         e.nativeEvent.stopImmediatePropagation();
-        e.preventDefault();
         await likePost(post._id);
         getPosts();
     }
 
     async function removePost(e) {
         e.stopPropagation();
-        e.nativeEvent.stopImmediatePropagation();
-        e.preventDefault();
 
         if (post.username === user.username) {
             try {
@@ -48,14 +51,12 @@ const Post = ({ post, getPosts }) => {
         }
     }
 
-    async function retweetPost(e) {
-        e.stopPropagation();
-        e.nativeEvent.stopImmediatePropagation();
-        e.preventDefault();
+    async function retweetPost() {
         const data = {
             'username': user.username,
             'text': input,
-            'retweetOf': post._id
+            'retweetOf': post._id,
+            'image': imageName
         };
         try {
             await createPost(data);
@@ -131,12 +132,12 @@ const Post = ({ post, getPosts }) => {
         if (!originPost) {
             displayOriginPost();
         }
-    })
+    },[])
 
     return (
-        <div className=" py-5 px-4 h-auto hover:bg-slate-50 w-full border-b border-r flex flex-col" onClick={(e) => handleNavigation(e,"/post/" + post._id)}>
+        <div className="cursor-pointer py-5 px-4 h-auto hover:bg-slate-50 w-full border-b border-r flex flex-col" onClick={(e) => handleNavigation(e,"/post/" + post._id)}>
             {(originPost) ? <p>En réponse à un <a className="text-twitter-blue hover:underline" href="#" onClick={(e) => handleNavigation(e,"/post/" + originPost._id)}>post</a> de <a>@{originPost.idName}</a></p> : null}
-            <div className="">
+            <div className={`flex flex-col }`}>
                 <div className="flex justify-between">
                     <div className="flex justify-start space-x-2 place-items-center">
                         <a className="font-bold hover:underline text-lg" href="#" onClick={(e) => {handleNavigation(e,"/profile/" + post.idName)}}>{post.username}</a>
@@ -144,7 +145,13 @@ const Post = ({ post, getPosts }) => {
                     </div>
                     {(post.username === user.username) ? <button onClick={removePost}>s</button> : null}
                 </div>
+                
                 <p>{post.text}</p>
+                {(post.image.length !== 0) ? <img 
+                    src={"http://localhost:3000/api/" + post.image[0]} 
+                    className={`max-h-64 self-center mb-4 transition-transform  ${isZoomed ? 'scale-150' : ''}`}
+                    onClick={(e) => toggleZoom(e)}
+                    /> : null}
             </div>
             {(subPost) ? <SubPost formatDate={formatDate} post={subPost}></SubPost> : null}
             <div className="flex justify-evenly">
@@ -152,7 +159,7 @@ const Post = ({ post, getPosts }) => {
                 <button onClick={(e) => openPostModal(e)}>r {post.retweets}</button>
                 <button onClick={(e) => like(e)}>l {post.likes}</button>
             </div>
-            <InputModal closeModal={closePostModal} modalOpen={postModalOpen} input={input} inputSubmit={retweetPost} setInput={setInput}></InputModal>
+            <InputModal closeModal={closePostModal} modalOpen={postModalOpen} input={input} inputSubmit={retweetPost} setInput={setInput} setImage={setImageName}></InputModal>
         </div>
     )
 }
