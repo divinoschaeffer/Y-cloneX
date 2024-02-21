@@ -2,6 +2,7 @@ import {react, useState} from "react";
 import axios from 'axios'
 import FirstStepLogin from "./FirstStepLogin";
 import SecondStepLogin from "./SecondStepLogin";
+import { isAlreadyUser } from "../../services/userServices";
 
 const LoginModal = ({showModal, closeModal}) => {
 
@@ -26,19 +27,20 @@ const LoginModal = ({showModal, closeModal}) => {
         return;
     }
 
-    const isUser = (idName) => {
+    const isUser = async (idName) => {
         if(/\s+/.test(idName) || idName === "")
             displayErrorUsername();
-        axios.get(`http://localhost:3000/api/user/isUser/${idName}`)
-        .then((response) => {
-            if(!response.data.isUser){
+        try {
+            const result = await isAlreadyUser(idName);
+            if(!result){
                 displayErrorUsername();
             }
             else{
                 setStepNumber(stepNumber+1);
             }
-        })
-        .catch((e) => console.log(e))
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return(

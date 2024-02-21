@@ -1,10 +1,15 @@
 import CreatePostModal from "../components/CreatePostModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Menu from "../components/Menu";
+import ListPosts from "../components/post/ListPosts";
+import { getPosts } from "../services/postServices";
 
 
 const Home = () => {
     const [postModalOpen, setPostModalOpen] = useState(false);
+    const [listPosts, setListsPosts] = useState([]);
+
+    console.log(process.env.REACT_APP_API_URL)
 
     const openPostModal = () => {
         setPostModalOpen(true);
@@ -14,10 +19,25 @@ const Home = () => {
         setPostModalOpen(false);
     }
 
-    return(
-        <div className="flex flex-row w-full">
-            <Menu openPostModal={openPostModal}></Menu>
-            <CreatePostModal closeModal={closePostModal} modalOpen={postModalOpen}></CreatePostModal>
+    async function fetchPosts() {
+        try {
+            const posts = await getPosts();
+            if(posts.length !== 0)
+                setListsPosts(posts);
+        } catch (error) {
+            console.error('Error fetching posts:', error);
+        }
+    }
+
+    useEffect(() => {
+        fetchPosts();
+    }, [])
+
+    return (
+        <div className="flex md:flex-row w-full flex-col-reverse">
+            <Menu openPostModal={openPostModal} ></Menu>
+            <ListPosts listPosts={listPosts} getPosts={fetchPosts} ></ListPosts>
+            <CreatePostModal closeModal={closePostModal} modalOpen={postModalOpen} getPosts={fetchPosts}></CreatePostModal>
         </div>
     )
 }

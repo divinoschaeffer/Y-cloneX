@@ -1,29 +1,28 @@
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { loginToAPI } from "../../services/authServices";
 // import dotenv from '';
 // dotenv.config();
 
 const SecondStepLogin = ({idName, displayError}) =>{
 
     const [password, setPassword] = useState ("");
-    const {user, login, logout} = useAuth();
+    const {login} = useAuth();
     const navigate = useNavigate();
 
-    const setupLogin = () => {
+    const setupLogin = async () => {
         const data = {
             "idName": idName,
             "password": password
         }
-        axios.post(`http://localhost:3000/api/auth/login`, data)
-        .then((response) => {
-            login(response.data.user);
+        try {
+            const user = await loginToAPI(data);
+            login(user);
             navigate('/home', {replace: true});
-        })  
-        .catch((err) => {
+        } catch (error) {
             displayError();
-        })
+        }
     }
 
     return(
@@ -49,9 +48,9 @@ const SecondStepLogin = ({idName, displayError}) =>{
                     <p className="text-twitter-blue text-xs">Mot de passe oublié ?</p>
                 </div>
             </section>
-            <section className="mt-[34rem] w-full h-12 md:mt-[15rem] md:w-[23rem]">
+            <section className="mt-[20rem] w-full h-12 md:mt-[15rem] md:w-[23rem]">
                 <button className="border rounded-full w-full h-full text-white font-bold bg-black"
-                onClick={() => setupLogin()}
+                onClick={async () => await setupLogin()}
                 >Se connecter</button>
             </section>
         </div>

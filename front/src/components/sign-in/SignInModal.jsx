@@ -3,6 +3,8 @@ import DateSelector from "../DateSelector";
 import axios from 'axios';
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { isAlreadyUser } from "../../services/userServices";
+import { signToAPI } from "../../services/authServices";
 
 
 const SignInModal = ({showModal, closeModal}) => {
@@ -19,7 +21,7 @@ const SignInModal = ({showModal, closeModal}) => {
     const [wrongPassword, setWrongPassword] = useState(false);
     const [textError, setTextError] = useState("");
 
-    const {user, login, logout} = useAuth();
+    const { login } = useAuth();
 
     const navigate = useNavigate();
 
@@ -40,19 +42,19 @@ const SignInModal = ({showModal, closeModal}) => {
         return;
     }
 
-    const isUser = (idName) => {
+    const isUser = async (idName) => {
         if(/\s+/.test(idName) || idName === "")
             displayAlreadyUse();
-        axios.get(`http://localhost:3000/api/user/isUser/${idName}`)
-        .then((response) => {
-            if(response.data.isUser){
+        try {
+            const result = await isAlreadyUser(idName);
+            if(result){
                 displayAlreadyUse();
                 return true;
             }
-            else
-                return false;
-        })
-        .catch((e) => console.log(e))
+            return false;
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     const goodPassword = () => {
@@ -71,8 +73,8 @@ const SignInModal = ({showModal, closeModal}) => {
         return true;
     }
 
-    const createAccount = () => {
-        if(isUser(username)){
+    const createAccount = async () => {
+        if(await isUser(username)){
             displayAlreadyUse();
             return;
         }
@@ -87,14 +89,13 @@ const SignInModal = ({showModal, closeModal}) => {
                 'password': password,
                 'birthDate': formattedDate
             };
-            axios.post('http://localhost:3000/api/auth/sign-in', data)
-            .then((response) => {
-                login(response.data.user);
-                navigate('/home',{replace: true});
-            })
-            .catch((e) => {
-                console.log(e);
-            })
+            try {
+                const user = await signToAPI(data);
+                login(user);
+                navigate('/home', {replace: true});
+            } catch (error) {
+                console.log(error);
+            }
         }
     }
 
@@ -131,7 +132,7 @@ const SignInModal = ({showModal, closeModal}) => {
                 </section>
                 <footer className="">
                     <button className={`rounded-full bg-black font-semibold text-white w-[24rem] md:w-[28rem] ${(wrongPassword || alreadyUse)? 'md:mt-2' :'md:mt-16'} h-12 mt-72`}
-                    onClick={() => createAccount()}
+                    onClick={async () => await createAccount()}
                     >
                         Créer mon compte
                     </button>
