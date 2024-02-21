@@ -20,17 +20,16 @@ const Home = () => {
     async function fetchPosts() {
         try {
             const posts = await getPosts();
-            setListsPosts(posts);
+            if(posts.length !== 0)
+                setListsPosts(posts);
         } catch (error) {
             console.error('Error fetching posts:', error);
         }
     }
 
     useEffect(() => {
-
-        if (listPosts.length === 0)
-            fetchPosts();
-    })
+        fetchPosts();
+    }, [])
 
     return (
         <div className="flex flex-row w-full">
