@@ -9,8 +9,6 @@ const Home = () => {
     const [postModalOpen, setPostModalOpen] = useState(false);
     const [listPosts, setListsPosts] = useState([]);
 
-    console.log(process.env.REACT_APP_API_URL)
-
     const openPostModal = () => {
         setPostModalOpen(true);
     }
