@@ -32,7 +32,7 @@ const Post = () => {
     },[id])
 
     return(
-        <div className="flex flex-row w-full h-full">
+        <div className="flex md:flex-row w-full flex-col-reverse">
             <Menu openPostModal={openPostModal} ></Menu>
             {(post !== null) ? <OpenPost post={post} fetchPost={fetchPost}></OpenPost> : null}
             <CreatePostModal closeModal={closePostModal} modalOpen={postModalOpen} getPosts={() => {}}></CreatePostModal>

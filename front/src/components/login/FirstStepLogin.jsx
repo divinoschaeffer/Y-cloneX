@@ -12,7 +12,7 @@ const FirstStepLogin = ({input, setInput, closeModal, isUser}) => {
 
                     </input>
                     <button className="text-white font-bold bg-black rounded-full w-3/4 md:w-1/2 h-10"
-                    onClick={() => isUser(input)}
+                    onClick={async () => await isUser(input)}
                     >Suivant</button>
                     <button className="font-bold bg-white rounded-full border-gray-300 border w-3/4 md:w-1/2 h-10">Mot de passe oublié ?</button>
                     <div className="flex flex-row">

@@ -10,7 +10,7 @@ const Menu = ({openPostModal}) => {
     
 
     return (
-        <div className="bg-white flex md:flex-col md:w-1/4 md:h-screen items-end md:border-r-2 min-w-[5rem] sticky md:top-0 bottom-0">
+        <div className="bg-white flex md:flex-col md:w-1/4 w-full md:h-screen items-end md:border-r-2 min-w-[5rem] md:sticky fixed md:top-0 bottom-0">
             <div className="w-full md:w-auto md:mr-1 xl:mr-8 md:space-y-4 flex md:flex-col items-center xl:items-start justify-evenly md:justify-normal">
                 <h1 className="text-4xl text-center font-bold hidden md:visible border border-white hover:rounded-full hover:bg-gray-200 w-fit py-2 px-4">Y</h1>
                 <a className="flex flex-row space-x-4 items-center border border-white hover:border hover:rounded-full hover:bg-gray-200 w-fit py-2 px-4" href="/home">

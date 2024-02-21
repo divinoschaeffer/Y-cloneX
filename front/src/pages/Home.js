@@ -9,6 +9,8 @@ const Home = () => {
     const [postModalOpen, setPostModalOpen] = useState(false);
     const [listPosts, setListsPosts] = useState([]);
 
+    console.log(process.env.REACT_APP_API_URL)
+
     const openPostModal = () => {
         setPostModalOpen(true);
     }
@@ -32,7 +34,7 @@ const Home = () => {
     }, [])
 
     return (
-        <div className="flex flex-row w-full">
+        <div className="flex md:flex-row w-full flex-col-reverse">
             <Menu openPostModal={openPostModal} ></Menu>
             <ListPosts listPosts={listPosts} getPosts={fetchPosts} ></ListPosts>
             <CreatePostModal closeModal={closePostModal} modalOpen={postModalOpen} getPosts={fetchPosts}></CreatePostModal>

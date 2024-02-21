@@ -148,12 +148,12 @@ const Post = ({ post, getPosts }) => {
                 
                 <p>{post.text}</p>
                 {(post.image.length !== 0) ? <img 
-                    src={"http://localhost:3000/api/" + post.image[0]} 
+                    src={process.env.REACT_APP_API_URL + post.image[0]} 
                     className={`max-h-64 self-center mb-4 transition-transform  ${isZoomed ? 'scale-150' : ''}`}
                     onClick={(e) => toggleZoom(e)}
                     /> : null}
             </div>
-            {(subPost) ? <SubPost formatDate={formatDate} post={subPost}></SubPost> : null}
+            {(subPost) ? <SubPost formatDate={formatDate} post={subPost} handleNavigation={handleNavigation}></SubPost> : null}
             <div className="flex justify-evenly">
                 <a href="#" onClick={(e) => handleNavigation(e,"/post/" + post._id)}>c {post.comments.length}</a>
                 <button onClick={(e) => openPostModal(e)}>r {post.retweets}</button>

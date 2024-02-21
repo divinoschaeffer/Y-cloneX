@@ -16,7 +16,7 @@ const CreatePostModal = ({closeModal, modalOpen, getPosts}) => {
             'image': image
         };
         try {
-            const post = await createPost(data);
+            await createPost(data);
             setText("");
             setImage("");
             closeModal();
