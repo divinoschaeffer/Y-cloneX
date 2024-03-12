@@ -17,7 +17,6 @@ dotenv.config();
 const port = process.env.PORT || 3000; // Port sur lequel le serveur écoutera
 
 
-// Connexion base de donnée
 mongoose.connect(process.env.DATABASE_URL)
   .then(() => {
     console.log('Connecté à la base de données MongoDB');
@@ -53,7 +52,6 @@ app.listen(port, () => {
     console.log('Connexion sur le port');
 });
 
-// Route racine
 app.get('/', (req, res) => {
-  res.json('Bienvenue sur le serveur Express !');
+  res.json('API Y');
 });
